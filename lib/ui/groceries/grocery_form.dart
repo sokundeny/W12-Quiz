@@ -42,11 +42,18 @@ class _NewItemState extends State<NewItem> {
   }
 
   void onReset() {
-    // Will be implemented later - Reset all fields to the initial values
+    
   }
 
   void onAdd() {
     // Will be implemented later - Create and return the new grocery
+    Grocery newGrocery=Grocery(
+      id: DateTime.now().toString(), 
+      name: _nameController.text, 
+      quantity: int.parse(_quantityController.text), 
+      category: _selectedCategory
+    );
+    Navigator.pop(context,newGrocery);
   }
 
   @override
@@ -75,17 +82,34 @@ class _NewItemState extends State<NewItem> {
                 const SizedBox(width: 8),
                 Expanded(
                   child: DropdownButtonFormField<GroceryCategory>(
-                    initialValue: _selectedCategory,
-                    items: [  ],
-                    onChanged: (value) {
-                      if (value != null) {
-                        setState(() {
-                          _selectedCategory = value;
-                        });
-                      }
-                    },
-                  ),
+                  initialValue: _selectedCategory,
+                  decoration: const InputDecoration(labelText: 'Category'),
+                  items: GroceryCategory.values
+                      .map(
+                        (cat) => DropdownMenuItem<GroceryCategory>(
+                          value: cat,
+                          child: Row(
+                            spacing: 15,
+                            children: [
+                              Container(
+                                width: 15,
+                                height: 15,
+                                color: cat.color,
+                              ),
+                              Text(cat.label)
+                          ],),
+                        ),
+                      )
+                      .toList(),
+                  onChanged: (value) {
+                    if (value != null) {
+                      setState(() {
+                        _selectedCategory = value;
+                      });
+                    }
+                  },
                 ),
+                                ),
               ],
             ),
             const SizedBox(height: 12),
